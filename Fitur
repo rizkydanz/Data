@@ -1,0 +1,13 @@
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+
+# Encoding untuk data kategorikal
+encoder = LabelEncoder()
+for col in df.select_dtypes(include=['object']).columns:
+    df[col] = encoder.fit_transform(df[col])
+
+# Normalisasi data numerik
+scaler = StandardScaler()
+df[df.columns] = scaler.fit_transform(df)
+
+print("Data setelah feature engineering:")
+print(df.head())
