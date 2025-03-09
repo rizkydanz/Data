@@ -1,0 +1,33 @@
+import pandas as pd
+
+def clean_data(df):
+    # 1. Menghapus duplikasi
+    df = df.drop_duplicates()
+    
+    # 2. Menghapus kolom yang tidak berguna (sesuaikan dengan dataset)
+    df = df.drop(columns=['Unnamed: 0'], errors='ignore')
+    
+    # 3. Mengubah nama kolom agar lebih konsisten
+    df.columns = [col.strip().lower().replace(' ', '_') for col in df.columns]
+    
+    # 4. Menghapus baris dengan nilai yang terlalu banyak missing values
+    df = df.dropna(thresh=df.shape[1] * 0.6)
+    
+    # 5. Mengisi missing values dengan strategi tertentu
+    for col in df.select_dtypes(include=['number']).columns:
+        df[col].fillna(df[col].median(), inplace=True)
+    for col in df.select_dtypes(include=['object']).columns:
+        df[col].fillna(df[col].mode()[0], inplace=True)
+    
+    # 6. Menghapus karakter yang tidak perlu pada kolom string
+    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    
+    # 7. Mengubah tipe data jika diperlukan
+    df = df.convert_dtypes()
+    
+    return df
+
+# Contoh penggunaan
+data = pd.read_csv('data.csv')  # Ganti dengan path file yang sesuai
+cleaned_data = clean_data(data)
+cleaned_data.to_csv('cleaned_data.csv', index=False)
