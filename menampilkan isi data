@@ -1,0 +1,9 @@
+import pandas as pd
+
+# Load dataset
+df = pd.read_csv("dataset.csv")  # Ganti dengan nama dataset yang sesuai
+
+# Menampilkan informasi awal
+print(df.head())  # 5 baris pertama
+print(df.info())  # Info dataset
+print(df.describe())  # Statistik deskriptif
